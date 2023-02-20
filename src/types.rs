@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use redis_module::{RedisString};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub(crate) struct StateMachine{

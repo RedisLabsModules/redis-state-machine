@@ -1,8 +1,6 @@
-use redis_module::{Context, RedisError, RedisString, RedisResult, RedisValue, REDIS_OK, key::RedisKey};
-use redis_module::key::{verify_type};
+use redis_module::{Context, RedisError, RedisString, RedisResult, RedisValue, key::RedisKey};
 use crate::REDIS_SM_TYPE;
 use crate::types::StateMachine;
-use serde_json::Value;
 
 pub(crate) fn get(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 
@@ -15,8 +13,19 @@ pub(crate) fn get(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     let rkey = RedisKey::open(ctx.ctx, &key);
     let val =rkey.get_value::<StateMachine>(&REDIS_SM_TYPE);
 
-    // return Ok(RedisValue::Null);
+    match val {
+        Err(e) => {
+            return Err(e);
+        }
+        Ok(v) => {
+            if v.is_none() {
+                return Ok(RedisValue::Null);
+            } else {
+                let sm = val.unwrap();
+                let rval= serde_json::to_string(&sm)?;
+                return Ok(RedisValue::BulkString(rval));
+            }
+        }
 
-    // // return RedisValue::SimpleString(())
-    return REDIS_OK;
+    }
 }

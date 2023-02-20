@@ -9,7 +9,7 @@ pub const MODULE_NAME: &str = "RedisStateMachine";
 pub const MODULE_TYPE: &str = "RedisStateMachine";
 
 mod function_delete;
-mod function_load;
+mod function_set;
 mod function_get;
 mod function_state;
 mod rdb;
@@ -22,7 +22,7 @@ redis_module! {
     commands: [
         // ["SM.DEL", function_delete::delete, "write", 1, 1, 1],
         ["SM.GET", function_get::get, "readonly", 0, 0, 0],
-        ["SM.SET", function_load::load, "write deny-oom", 1, 1, 1],
+        ["SM.SET", function_set::set, "write deny-oom", 1, 1, 1],
         ["SM.STATE", function_state::state, "readonly", 0, 0, 0],
         // ["SM.RESET", function_reset::reset, "write deny-oom", 1, 1, 1],
     ],

@@ -6,7 +6,7 @@ use try_catch::catch;
 
 
 // Load the state machine from a json string
-pub(crate) fn load(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
+pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 
     let args = args.into_boxed_slice();
     if args.len() < 3 {
@@ -28,6 +28,13 @@ pub(crate) fn load(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     }
 
     let rkey = RedisKeyWritable::open(ctx.ctx, &key);
-    rkey.set_value(&REDIS_SM_TYPE,rval);
-    return REDIS_OK;
+    let res = rkey.set_value(&REDIS_SM_TYPE,rval);
+    match res {
+        Err(e) => {
+            return Err(e);
+        }
+        Ok(..) => {
+            return REDIS_OK;
+        }
+    }
 }
