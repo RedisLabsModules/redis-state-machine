@@ -4,3 +4,4 @@ target
 .venv*
 .vscode
 *.rdb
+*.pyc
