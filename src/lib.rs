@@ -1,4 +1,4 @@
-use redis_module::native_types::RedisType;
+use rdb::REDIS_SM_TYPE;
 
 #[macro_use]
 
@@ -6,20 +6,24 @@ extern crate redis_module;
 
 pub const REDIS_SM_TYPE_VERSION: i32 = 1;
 pub const MODULE_NAME: &str = "RedisStateMachine";
-pub const MODULE_TYPE: &str = "RedisStateMachine-Store";
+pub const MODULE_TYPE: &str = "RedisStateMachine";
 
 mod function_delete;
 mod function_load;
+mod function_get;
+mod function_state;
+mod rdb;
+mod types;
 
 redis_module! {
     name: "redisstate",
     version: 1,
-    data_types: [],
+    data_types: [REDIS_SM_TYPE],
     commands: [
-        ["SM.LOAD", function_load::load, "write deny-oom", 1, 1, 1],
-        ["SM.DEL", function_delete::delete, "write", 1, 1, 1],
-    //     ["SM.RESET", commands::load, "write", 1, 1, 1],
-    //     ["SM.GET", commands::get, "readonly", 1, 1, 1],
-    //     ["SM.CURRENT", commands::state, "readonly", 1, 1, 1],
+        // ["SM.DEL", function_delete::delete, "write", 1, 1, 1],
+        ["SM.GET", function_get::get, "readonly", 0, 0, 0],
+        ["SM.SET", function_load::load, "write deny-oom", 1, 1, 1],
+        ["SM.STATE", function_state::state, "readonly", 0, 0, 0],
+        // ["SM.RESET", function_reset::reset, "write deny-oom", 1, 1, 1],
     ],
 }

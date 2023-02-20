@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: setup rust
+        with:
+          rust-version: stable
+
+      - name: build debug
+        run:
+          cargo build
+
+      - name: build release
+        run:
+          cargo build --release

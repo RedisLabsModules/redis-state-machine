@@ -1,0 +1,58 @@
+{
+    "SM.DEL": {
+        "summary": "Deletes a state machine",
+        "since": "0.1.0",
+        "complexity": "O(N)",
+        "group": "statemachine",
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key"
+            }
+        ]
+    },
+    "SM.GET": {
+        "summary": "Gets a state machine, or the current state of a machine",
+        "since": "0.1.0",
+        "complexity": "O(N)",
+        "group": "statemachine",
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key"
+            },
+            {
+                "name": "state",
+                "type": "string"
+            }
+        ]
+    },
+    "SM.SET": {
+        "summary": "Imports a state machine from a json blob",
+        "since": "0.1.0",
+        "complexity": "O(N)",
+        "group": "statemachine",
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key"
+            },
+            {
+                "name": "value",
+                "type": "string"
+            }
+        ]
+    },
+    "SM.STATE": {
+        "summary": "Gets the current state associated with a state machine",
+        "since": "0.1.0",
+        "complexity": "O(N)",
+        "group": "statemachine",
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key"
+            }
+        ]
+    }
+}

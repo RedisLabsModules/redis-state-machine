@@ -1,6 +1,7 @@
 [package]
 name = "redis-state-machine"
 description = "A state machine modules for Redis"
+authors = ["Redis OSS <oss@redis.io>"]
 license = "Redis Source Available License 2.0 (RSALv2) or the Server Side Public License v1 (SSPLv1)"
 version = "99.99.99"
 edition = "2021"
@@ -15,6 +16,11 @@ name = "redis_state"
 
 [dependencies]
 redis-module = "1.0.1"
+serde = {version = "1.0", features = ["derive"]}
+serde_json = "1.0.93"
+try-catch = "0.2.2"
+use = "0.0.0"
+
 
 [build-dependencies]
 regex = "1"
