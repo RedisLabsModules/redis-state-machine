@@ -1,9 +1,8 @@
-use redis_module::{Context, RedisError, RedisString, RedisResult, RedisValue, key::RedisKey};
-use crate::REDIS_SM_TYPE;
 use crate::types::StateMachine;
+use crate::REDIS_SM_TYPE;
+use redis_module::{key::RedisKey, Context, RedisError, RedisResult, RedisString, RedisValue};
 
 pub(crate) fn get(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
-
     let args = args.into_boxed_slice();
     if args.len() < 2 {
         return Err(RedisError::WrongArity);
@@ -22,10 +21,9 @@ pub(crate) fn get(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
                 return Ok(RedisValue::Null);
             } else {
                 let sm = val.unwrap();
-                let rval= serde_json::to_string(&sm)?;
+                let rval = serde_json::to_string(&sm)?;
                 return Ok(RedisValue::BulkString(rval));
             }
         }
-
     }
 }

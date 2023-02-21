@@ -1,7 +1,6 @@
 use rdb::REDIS_SM_TYPE;
 
 #[macro_use]
-
 extern crate redis_module;
 
 pub const REDIS_SM_TYPE_VERSION: i32 = 1;
@@ -9,8 +8,8 @@ pub const MODULE_NAME: &str = "RedisStateMachine";
 pub const MODULE_TYPE: &str = "RedisStateMachine";
 
 mod function_delete;
-mod function_set;
 mod function_get;
+mod function_set;
 mod function_state;
 mod rdb;
 mod types;

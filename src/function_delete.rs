@@ -1,4 +1,6 @@
-use redis_module::{Context, RedisError, RedisResult, RedisString, NextArg, RedisValue, key::{RedisKeyWritable}};
+use redis_module::{
+    key::RedisKeyWritable, Context, NextArg, RedisError, RedisResult, RedisString, RedisValue,
+};
 
 use crate::rdb::REDIS_SM_TYPE;
 use crate::types::StateMachine;
@@ -10,7 +12,7 @@ pub(crate) fn delete(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     if args.len() > 0 {
         return Err(RedisError::WrongArity);
     }
-    if key.is_empty()  {
+    if key.is_empty() {
         return Err(RedisError::Str("Empty key specified"));
     }
 

@@ -1,0 +1,24 @@
+name: Lint
+
+on:
+  push: 
+    branches:
+      - master
+      - main
+      - '[0-9].[0-9]'
+
+  pull_request:
+    branches: 
+      - master
+      - main
+      - '[0-9].[0-9]'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: stable
+      - run: cargo fmt -- --check

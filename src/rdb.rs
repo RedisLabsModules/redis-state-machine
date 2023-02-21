@@ -1,14 +1,10 @@
-use redis_module::{
-    RedisModuleTypeMethods, native_types::RedisType, REDISMODULE_AUX_BEFORE_RDB,
-
-};
-
+use redis_module::{native_types::RedisType, RedisModuleTypeMethods, REDISMODULE_AUX_BEFORE_RDB};
 
 pub(crate) static REDIS_SM_VERSION: i32 = 1;
 pub(crate) static REDIS_SM_TYPE: RedisType = RedisType::new(
     "StateType",
     REDIS_SM_VERSION,
-    RedisModuleTypeMethods{
+    RedisModuleTypeMethods {
         version: redis_module::TYPE_METHOD_VERSION,
         rdb_load: None,
         rdb_save: None,
