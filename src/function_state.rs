@@ -1,4 +1,4 @@
-use redis_module::{Context, RedisError, RedisString, RedisResult, RedisValue, key::RedisKey, REDIS_OK};
+use redis_module::{Context, RedisError, RedisString, RedisResult, RedisValue, key::RedisKey};
 use crate::REDIS_SM_TYPE;
 use crate::types::StateMachine;
 

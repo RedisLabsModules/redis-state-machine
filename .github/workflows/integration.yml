@@ -15,9 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: setup rust
+      - uses: ATiltedTree/setup-rust@v1
         with:
           rust-version: stable
+      - uses: actions/setup-python@v4
+        with:
+          cache: 'pip'
+      - name: install test deps
+        run: pip install -r tests/requirements.txt
 
       - name: build debug
         run:
