@@ -23,8 +23,11 @@ redis_module! {
         ["SM.DEL", function_delete::delete, "write", 1, 1, 1],
         ["SM.GET", function_get::get, "readonly", 0, 0, 0],
         ["SM.SET", function_set::set, "write deny-oom", 1, 1, 1],
-        // ["SM.STATES", function_state::states, "readonly", 0, 0, 0],
-        ["SM.STATE", function_state::state, "write deny-oom", 0, 0, 0],
+        ["SM.FORCE", function_set::force_set, "write deny-oom", 1, 1, 1],
+        ["SM.CURRENT", function_state::current_state, "readonly", 0, 0, 0],
         ["SM.RESET", function_set::reset, "write deny-oom", 1, 1, 1],
+        ["SM.STATES", function_state::states, "readonly", 0, 0, 0],
+        // ["SM.NEXT", function_state::states, "readonly", 0, 0, 0],
+        // ["SM.PREV", function_state::states, "readonly", 0, 0, 0],
     ],
 }

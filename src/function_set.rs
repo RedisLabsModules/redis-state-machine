@@ -7,7 +7,7 @@ use crate::types::StateMachine;
 pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 
     let args = args.into_boxed_slice();
-    if args.len() < 3 {
+    if args.len() > 3 || args.len() < 2 {
         return Err(RedisError::WrongArity);
     }
 
@@ -15,8 +15,7 @@ pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     let val = &args[2];
     let mut current= &RedisString::create(std::ptr::null_mut(), "");
     if args.len() == 4 {
-        current= &args[3];
-    } else {
+        current = &args[3];
     }
 
     let mut rval: StateMachine = serde_json::from_str(&val.to_string())?;
@@ -75,5 +74,44 @@ pub(crate) fn reset(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
                 }
             }
         }
+    }
+}
+
+// Force set the named state machine to a value
+pub(crate) fn force_set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
+
+    let args = args.into_boxed_slice();
+    if args.len() != 3 {
+        return Err(RedisError::WrongArity);
+    }
+
+    let key = &args[1];
+    let state= &args[2];
+
+    let rkey = RedisKeyWritable::open(ctx.ctx, &key);
+    let val = rkey.get_value::<StateMachine>(&REDIS_SM_TYPE);
+
+    match val {
+        Err(e) => {
+            return Err(e);
+        }
+        Ok(v) => {
+            if v.is_none() {
+                return Ok(RedisValue::Null);
+            } else {
+                let rval = v.unwrap();
+                rval.set_current(state.to_string());
+                let res = rkey.set_value(&REDIS_SM_TYPE,rval);
+                match res {
+                    Err(e) => {
+                        return Err(e);
+                    }
+                    Ok(..) => {
+                        return REDIS_OK;
+                    }
+                }
+            }
+        }
+
     }
 }

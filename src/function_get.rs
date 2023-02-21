@@ -11,7 +11,7 @@ pub(crate) fn get(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     let key = &args[1];
 
     let rkey = RedisKey::open(ctx.ctx, &key);
-    let val =rkey.get_value::<StateMachine>(&REDIS_SM_TYPE);
+    let val = rkey.get_value::<StateMachine>(&REDIS_SM_TYPE);
 
     match val {
         Err(e) => {

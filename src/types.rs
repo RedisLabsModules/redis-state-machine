@@ -24,4 +24,8 @@ impl StateMachine {
         return &self.initial;
     }
 
+    pub(crate) fn map(&self) -> &HashMap<String, Vec<String>> {
+        return &self.map;
+    }
+
 }
