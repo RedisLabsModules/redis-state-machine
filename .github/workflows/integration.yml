@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: setup rust
+      - uses: ATiltedTree/setup-rust@v1
         with:
           rust-version: stable
 
