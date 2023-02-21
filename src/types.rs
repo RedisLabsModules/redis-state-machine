@@ -1,6 +1,5 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use redis_module::{RedisString};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub(crate) struct StateMachine{
@@ -16,16 +15,13 @@ impl StateMachine {
         self.current = Option::from(c);
     }
 
-    // pub(crate) fn get_current(&self) -> Option<String> {
-    //     return self.current
-    // }
-
-    pub(crate) fn set_initial(&mut self, c: String) {
-        self.initial = c;
+    pub(crate) fn current(&self) -> &str {
+        let v = self.current.as_ref().unwrap();
+        return v;
     }
 
-    // pub(crate) fn get_initial(&self) -> String {
-    //     return self.initial
-    // }
+    pub(crate) fn initial(&self) -> &str {
+        return &self.initial;
+    }
 
 }

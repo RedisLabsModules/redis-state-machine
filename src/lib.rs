@@ -20,10 +20,11 @@ redis_module! {
     version: 1,
     data_types: [REDIS_SM_TYPE],
     commands: [
-        // ["SM.DEL", function_delete::delete, "write", 1, 1, 1],
+        ["SM.DEL", function_delete::delete, "write", 1, 1, 1],
         ["SM.GET", function_get::get, "readonly", 0, 0, 0],
         ["SM.SET", function_set::set, "write deny-oom", 1, 1, 1],
-        ["SM.STATE", function_state::state, "readonly", 0, 0, 0],
-        // ["SM.RESET", function_reset::reset, "write deny-oom", 1, 1, 1],
+        // ["SM.STATES", function_state::states, "readonly", 0, 0, 0],
+        ["SM.STATE", function_state::state, "write deny-oom", 0, 0, 0],
+        ["SM.RESET", function_set::reset, "write deny-oom", 1, 1, 1],
     ],
 }

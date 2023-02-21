@@ -1,4 +1,4 @@
-use redis_module::{Context, RedisError, RedisResult, RedisString, NextArg, RedisValue, REDIS_OK, key::{RedisKey, RedisKeyWritable}};
+use redis_module::{Context, RedisError, RedisResult, RedisString, NextArg, RedisValue, key::{RedisKeyWritable}};
 
 use crate::rdb::REDIS_SM_TYPE;
 use crate::types::StateMachine;
@@ -17,7 +17,16 @@ pub(crate) fn delete(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     let kk = RedisKeyWritable::open(ctx.ctx, &key);
 
     let val = kk.get_value::<StateMachine>(&REDIS_SM_TYPE);
-    println!("{:#?}", val);
-    // TODO only delete if this is from the right type
-    return kk.delete();
+    match val {
+        Err(e) => {
+            return Err(e);
+        }
+        Ok(v) => {
+            if v.is_none() {
+                return Ok(RedisValue::Null);
+            } else {
+                return kk.delete();
+            }
+        }
+    }
 }

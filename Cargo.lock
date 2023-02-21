@@ -380,7 +380,6 @@ dependencies = [
  "regex",
  "serde",
  "serde_json",
- "try-catch",
  "use",
 ]
 
@@ -528,17 +527,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d326610f408c7a4eb6f51c37c330e496b08506c9457c9d34287ecc38809fb060"
 dependencies = [
  "unicode-width",
-]
-
-[[package]]
-name = "try-catch"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f8ac07b511057dbab5380dbd9be97b8375c577136d45db42b63d039c83e54630"
-dependencies = [
- "proc-macro2",
- "quote 1.0.21",
- "syn 1.0.107",
 ]
 
 [[package]]
