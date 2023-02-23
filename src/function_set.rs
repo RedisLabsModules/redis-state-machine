@@ -7,7 +7,7 @@ use redis_module::{
 // Load the state machine from a json string
 pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     let args = args.into_boxed_slice();
-    if args.len() > 3 || args.len() < 2 {
+    if args.len() > 4 || args.len() < 3 {
         return Err(RedisError::WrongArity);
     }
 
@@ -42,13 +42,11 @@ pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 // Reset the state machine to the initial state
 pub(crate) fn reset(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     let args = args.into_boxed_slice();
-    if args.len() != 1 {
+    if args.len() != 2 {
         return Err(RedisError::WrongArity);
     }
 
     let key = &args[1];
-
-    // let mut rval: StateMachine = serde_json::from_str(&val.to_string())?;
 
     let rkey = RedisKeyWritable::open(ctx.ctx, &key);
     let val = rkey.get_value::<StateMachine>(&REDIS_SM_TYPE);
