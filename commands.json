@@ -43,7 +43,7 @@
             }
         ]
     },
-    "SM.STATE": {
+    "SM.STATES": {
         "summary": "Gets the current state associated with a state machine",
         "since": "0.1.0",
         "complexity": "O(N)",
@@ -52,6 +52,46 @@
             {
                 "name": "key",
                 "type": "key"
+            }
+        ]
+    },
+    "SM.RESET": {
+        "summary": "Resets a state machine to its initial state",
+        "since": "0.1.0",
+        "complexity": "O(N)",
+        "group": "statemachine",
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key"
+            }
+        ]
+    },
+    "SM.CURRENT": {
+        "summary": "Retrieves the current state machine state",
+        "since": "0.1.0",
+        "complexity": "O(N)",
+        "group": "statemachine",
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key"
+            }
+        ]
+    },
+    "SM.FORCE": {
+        "summary": "Forces the state machine into a named state",
+        "since": "0.1.0",
+        "complexity": "O(N)",
+        "group": "statemachine",
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key"
+            },
+            {
+                "name": "state",
+                "type": "string"
             }
         ]
     }

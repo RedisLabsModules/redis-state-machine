@@ -18,7 +18,7 @@ def _get_client(
     if from_url is None:
         redis_url = request.config.getoption("--redis-url")
         
-    client = redis.from_url(redis_url)
+    client = redis.from_url(redis_url, decode_responses=True)
     if flushdb:
         client.flushdb()
     return client

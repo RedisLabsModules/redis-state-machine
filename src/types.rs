@@ -14,7 +14,10 @@ impl StateMachine {
     }
 
     pub(crate) fn current(&self) -> &str {
-        self.current.as_ref().unwrap()
+        match &self.current {
+            Some(p) => p,
+            None => "",
+        }
     }
 
     pub(crate) fn initial(&self) -> &str {

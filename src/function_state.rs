@@ -4,7 +4,7 @@ use redis_module::{key::RedisKey, Context, RedisError, RedisResult, RedisString,
 
 pub(crate) fn current_state(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     let args = args.into_boxed_slice();
-    if args.len() != 1 {
+    if args.len() != 2 {
         return Err(RedisError::WrongArity);
     }
     let key = &args[1];
@@ -21,7 +21,7 @@ pub(crate) fn current_state(ctx: &Context, args: Vec<RedisString>) -> RedisResul
 
 pub(crate) fn states(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     let args = args.into_boxed_slice();
-    if args.len() != 1 {
+    if args.len() != 2 {
         return Err(RedisError::WrongArity);
     }
     let key = &args[1];
