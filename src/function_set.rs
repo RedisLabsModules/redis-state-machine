@@ -27,16 +27,9 @@ pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
         rval.set_current(rval.initial().to_string());
     }
 
-    let rkey = RedisKeyWritable::open(ctx.ctx, &key);
-    let res = rkey.set_value(&REDIS_SM_TYPE, rval);
-    match res {
-        Err(e) => {
-            return Err(e);
-        }
-        Ok(..) => {
-            return REDIS_OK;
-        }
-    }
+    let rkey = RedisKeyWritable::open(ctx.ctx, key);
+    rkey.set_value(&REDIS_SM_TYPE, rval)?;
+    REDIS_OK
 }
 
 // Reset the state machine to the initial state
@@ -50,29 +43,15 @@ pub(crate) fn reset(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 
     // let mut rval: StateMachine = serde_json::from_str(&val.to_string())?;
 
-    let rkey = RedisKeyWritable::open(ctx.ctx, &key);
-    let val = rkey.get_value::<StateMachine>(&REDIS_SM_TYPE);
-    match val {
-        Err(e) => {
-            return Err(e);
-        }
-        Ok(v) => {
-            if v.is_none() {
-                return Ok(RedisValue::Null);
-            } else {
-                let rval = v.unwrap();
-                rval.set_current(rval.initial().to_string());
-                let res = rkey.set_value(&REDIS_SM_TYPE, rval);
-                match res {
-                    Err(e) => {
-                        return Err(e);
-                    }
-                    Ok(..) => {
-                        return REDIS_OK;
-                    }
-                }
-            }
-        }
+    let rkey = RedisKeyWritable::open(ctx.ctx, key);
+    let v = rkey.get_value::<StateMachine>(&REDIS_SM_TYPE)?;
+
+    if let Some(rval) = v {
+        rval.set_current(rval.initial().to_string());
+        rkey.set_value(&REDIS_SM_TYPE, rval)?;
+        REDIS_OK
+    } else {
+        Ok(RedisValue::Null)
     }
 }
 
@@ -86,29 +65,14 @@ pub(crate) fn force_set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     let key = &args[1];
     let state = &args[2];
 
-    let rkey = RedisKeyWritable::open(ctx.ctx, &key);
-    let val = rkey.get_value::<StateMachine>(&REDIS_SM_TYPE);
+    let rkey = RedisKeyWritable::open(ctx.ctx, key);
+    let v = rkey.get_value::<StateMachine>(&REDIS_SM_TYPE)?;
 
-    match val {
-        Err(e) => {
-            return Err(e);
-        }
-        Ok(v) => {
-            if v.is_none() {
-                return Ok(RedisValue::Null);
-            } else {
-                let rval = v.unwrap();
-                rval.set_current(state.to_string());
-                let res = rkey.set_value(&REDIS_SM_TYPE, rval);
-                match res {
-                    Err(e) => {
-                        return Err(e);
-                    }
-                    Ok(..) => {
-                        return REDIS_OK;
-                    }
-                }
-            }
-        }
+    if let Some(rval) = v {
+        rval.set_current(state.to_string());
+        rkey.set_value(&REDIS_SM_TYPE, rval)?;
+        REDIS_OK
+    } else {
+        Ok(RedisValue::Null)
     }
 }

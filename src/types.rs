@@ -14,15 +14,14 @@ impl StateMachine {
     }
 
     pub(crate) fn current(&self) -> &str {
-        let v = self.current.as_ref().unwrap();
-        return v;
+        self.current.as_ref().unwrap()
     }
 
     pub(crate) fn initial(&self) -> &str {
-        return &self.initial;
+        &self.initial
     }
 
     pub(crate) fn map(&self) -> &HashMap<String, Vec<String>> {
-        return &self.map;
+        &self.map
     }
 }

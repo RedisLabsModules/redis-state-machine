@@ -9,21 +9,13 @@ pub(crate) fn get(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     }
     let key = &args[1];
 
-    let rkey = RedisKey::open(ctx.ctx, &key);
-    let val = rkey.get_value::<StateMachine>(&REDIS_SM_TYPE);
+    let rkey = RedisKey::open(ctx.ctx, key);
+    let v = rkey.get_value::<StateMachine>(&REDIS_SM_TYPE)?;
 
-    match val {
-        Err(e) => {
-            return Err(e);
-        }
-        Ok(v) => {
-            if v.is_none() {
-                return Ok(RedisValue::Null);
-            } else {
-                let sm = val.unwrap();
-                let rval = serde_json::to_string(&sm)?;
-                return Ok(RedisValue::BulkString(rval));
-            }
-        }
+    if v.is_none() {
+        Ok(RedisValue::Null)
+    } else {
+        let rval = serde_json::to_string(&v)?;
+        Ok(RedisValue::BulkString(rval))
     }
 }
