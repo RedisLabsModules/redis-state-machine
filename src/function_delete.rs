@@ -19,6 +19,7 @@ pub(crate) fn delete(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     let kk = RedisKeyWritable::open(ctx.ctx, &key);
 
     let v = kk.get_value::<StateMachine>(&REDIS_SM_TYPE)?;
+
     if v.is_none() {
         Ok(RedisValue::Null)
     } else {
