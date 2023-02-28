@@ -2,7 +2,7 @@ use redis_module::{native_types::RedisType, RedisModuleTypeMethods, REDISMODULE_
 
 use redis_module::raw;
 use std::mem;
-use std::os::raw::{c_int, c_void};
+use std::os::raw::c_void;
 
 use crate::types::StateMachine;
 

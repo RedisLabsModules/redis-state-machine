@@ -14,17 +14,14 @@ impl StateMachine {
     }
 
     pub(crate) fn current(&self) -> &str {
-        match &self.current {
-            Some(p) => return p,
-            None => return "",
-        }
+        self.current.as_ref().map_or("", |p| p)
     }
 
     pub(crate) fn initial(&self) -> &str {
-        return &self.initial;
+        &self.initial
     }
 
-    pub(crate) fn map(&self) -> &HashMap<String, Vec<String>> {
-        return &self.map;
+    pub(crate) const fn map(&self) -> &HashMap<String, Vec<String>> {
+        &self.map
     }
 }
