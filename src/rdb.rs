@@ -23,22 +23,10 @@ pub(crate) static REDIS_SM_TYPE: RedisType = RedisType::new(
         aux_save_triggers: REDISMODULE_AUX_BEFORE_RDB as i32,
         free_effort: None,
         unlink: None,
-        copy: None, //Some(copy),
+        copy: Some(copy),
         defrag: None,
     },
 );
-
-// pub unsafe extern "C" fn rdb_save(rdb: *mut raw::RedisModuleIO, value: *mut c_void) {
-//     let sm = unsafe { &*(value as *mut StateMachine) };
-//     let rval = serde_json::to_string(sm);
-//     raw::save_string(rdb, rval.unwrap().as_str());
-// }
-
-// pub extern "C" fn rdb_load(rdb: *mut raw::RedisModuleIO, encver: c_int) -> *mut c_void {
-//     // let data = raw::load_string(rdb);
-//     let sm = StateMachine::try_from(raw::load_string(rdb));
-//     Box::into_raw(Box::new(sm)) as *mut c_void;
-// }
 
 pub unsafe extern "C" fn mem_usage(value: *const c_void) -> usize {
     let sm = unsafe { &*(value as *mut StateMachine) };
