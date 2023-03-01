@@ -11,6 +11,7 @@ mod function_delete;
 mod function_get;
 mod function_set;
 mod function_state;
+// mod function_create;
 mod rdb;
 mod types;
 
@@ -28,6 +29,7 @@ redis_module! {
         // no tests
         ["SM.FORCE", function_set::force_set, "write deny-oom", 1, 1, 1],
         ["SM.RESET", function_set::reset, "write deny-oom", 1, 1, 1],
+        // ["SM.CREATE", function_create::create, "write deny-oom", 1, 1, 1],
         // ["SM.GO", function_state::go "write deny-oom", 1, 1, 1],
     ],
 }

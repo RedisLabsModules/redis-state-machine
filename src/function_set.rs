@@ -1,5 +1,5 @@
 use crate::rdb::REDIS_SM_TYPE;
-use crate::types::StateMachine;
+use crate::types::{StateMachine, new_from_string};
 use redis_module::{
     key::RedisKeyWritable, Context, NextArg, RedisError, RedisResult, RedisString, RedisValue,
     REDIS_OK,
@@ -19,7 +19,7 @@ pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
         .next_arg()
         .unwrap_or_else(|_| RedisString::create(std::ptr::null_mut(), ""));
 
-    let mut rval: StateMachine = serde_json::from_str(&val.to_string())?;
+    let mut rval: StateMachine = new_from_string(val)?;
 
     if !current.is_empty() {
         rval.set_current(current.to_string());
