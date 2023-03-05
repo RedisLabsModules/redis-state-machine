@@ -25,6 +25,7 @@ redis_module! {
         ["SM.CURRENT", function_state::current_state, "readonly", 0, 0, 0],
         ["SM.STATES", function_state::states, "readonly", 0, 0, 0],
         ["SM.DEL", function_delete::delete, "write", 1, 1, 1],
+        ["SM.TEMPLATE", function_get::template, "readonly", 0, 0, 0],
 
         // no tests
         ["SM.FORCE", function_set::force_set, "write deny-oom", 1, 1, 1],

@@ -94,5 +94,23 @@
                 "type": "string"
             }
         ]
+    },
+    "SM.CREATE": {
+        "summary": "Creates a blank state machine and stores it in the named key",
+        "since": "0.1.0",
+        "complexity": "O(N)",
+        "group": "statemachine",
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key"
+            }
+        ]
+    },
+    "SM.TEMPLATE": {
+        "summary": "Return the json template used for constructing a state machine",
+        "since": "0.1.0",
+        "complexity": "O(1)",
+        "group": "statemachine"
     }
 }

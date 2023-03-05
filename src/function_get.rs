@@ -1,4 +1,4 @@
-use crate::types::{StateMachine};
+use crate::types::{StateMachine, new};
 use crate::REDIS_SM_TYPE;
 use redis_module::{
     key::RedisKey, Context, NextArg, RedisError, RedisResult, RedisString, RedisValue,
@@ -21,4 +21,13 @@ pub(crate) fn get(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
         let rval = serde_json::to_string(&v)?;
         Ok(RedisValue::BulkString(rval))
     }
+}
+
+pub(crate) fn template(_ctx: &Context, args: Vec<RedisString>) -> RedisResult {
+    if args.len() != 1 {
+        return Err(RedisError::WrongArity);
+    }
+    let n = new();
+    let rval = serde_json::to_string(&n)?;
+    Ok(RedisValue::BulkString(rval))
 }

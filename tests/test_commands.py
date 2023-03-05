@@ -92,3 +92,10 @@ def test_reset(r):
 #     validmap = {"initial": initial, "map": mapstates}
 #     assert r.execute_command("SM.SET", "foostates", json.dumps(validmap))
 #     r.execute_command("SM.FORCE", "foostates", "too")
+
+def test_template(r):
+    res = r.execute_command("SM.TEMPLATE")
+    val = json.loads(res)
+    assert val['initial'] == ''
+    assert val['map'] == {}
+    assert val['current'] == None
