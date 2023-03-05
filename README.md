@@ -4,7 +4,7 @@
 
 A [Redis module](https://redis.io/docs/modules) that maintains a state machine on the server side.
 
-** Notice, this is experimental, and under active development.
+** Notice, this is experimental, and under active development. **
 
 ## Build
 
@@ -12,7 +12,7 @@ A [Redis module](https://redis.io/docs/modules) that maintains a state machine o
 
 * [Rust](https://www.rust-lang.org)
 
-* [GNU Make
+* GNU Make
 
 * Python >= [this file](.python-version)
 
@@ -22,4 +22,21 @@ A [Redis module](https://redis.io/docs/modules) that maintains a state machine o
 
 ```bash
 make run
+```
+
+### Testing
+
+Module testing is currently integration based - and done with pytest, and python.  
+
+Set up a virtual environment, with your test dependencies
+
+```
+python -m venv .venv
+source .venv/bin/activate
+pip install -r tests/requirements.txt
+```
+
+Run the tests
+```
+pytest
 ```

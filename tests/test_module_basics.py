@@ -11,9 +11,10 @@ def test_check_registered_commands(r):
         if m.get("name") == "redisstate":
             found = True
             break
-        
+
     assert found
-    
+
+
 def test_commands_registered(r):
     r.flushdb()
     here = os.path.dirname(__file__)

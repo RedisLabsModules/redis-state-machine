@@ -2,9 +2,10 @@ use redis_module::{native_types::RedisType, RedisModuleTypeMethods, REDISMODULE_
 
 use redis_module::raw;
 use std::mem;
-use std::os::raw::{c_void};
+use std::os::raw::{c_int, c_void};
+use std::ptr::{null_mut};
 
-use crate::types::StateMachine;
+use crate::types::{StateMachine, new_from_redisstring};
 
 pub(crate) static REDIS_SM_VERSION: i32 = 1;
 pub(crate) static REDIS_SM_TYPE: RedisType = RedisType::new(
@@ -12,7 +13,7 @@ pub(crate) static REDIS_SM_TYPE: RedisType = RedisType::new(
     REDIS_SM_VERSION,
     RedisModuleTypeMethods {
         version: redis_module::TYPE_METHOD_VERSION,
-        rdb_load: None, //Some(rdb_load),
+        rdb_load: Some(rdb_load),
         rdb_save: Some(rdb_save), 
         aof_rewrite: None,
         free: Some(free),
@@ -33,19 +34,21 @@ unsafe extern "C" fn rdb_save(rdb: *mut raw::RedisModuleIO, value: *mut c_void) 
     raw::save_string(rdb, &serde_json::to_string(&v).unwrap());
 }
 
-// unsafe extern "C" fn rdb_load(rdb: *mut raw::RedisModuleIO, _encver: c_int) -> *mut c_void {
-
-// //       guard!(let Ok(data) = raw::load_string(rdb) else { return null_mut() });
-// //   let json_string = data.to_string();
-// //   let fsm: StateMachine = serde_json::from_str(&json_string.to_string()).unwrap();
-// //   return Box::into_raw(Box::new(fsm)).cast::<c_void>();
-
-//     let data = raw::load_string(rdb);
-//     let res = data.unwrap();
-//     let rval: StateMachine = serde_json::from_str(&res.to_string());
-//     // return Box::into_raw(Box::new(rval)).cast::<c_void>();
-//     return rval.cast::<c_void>();
-// }
+unsafe extern "C" fn rdb_load(rdb: *mut raw::RedisModuleIO, _encver: c_int) -> *mut c_void {
+    let v= raw::load_string(rdb);
+    if v.is_err() {
+        return null_mut();
+    }
+    let f = v.unwrap();
+    let sm = new_from_redisstring(f);
+    if sm.is_err() {
+        return null_mut();
+    }
+    let ff = sm.unwrap();
+    let bb = Box::new(ff);
+    let rawbox = Box::into_raw(bb);
+    return rawbox as *mut c_void;
+}
 
 unsafe extern "C" fn mem_usage(value: *const c_void) -> usize {
     let sm = unsafe { &*(value as *mut StateMachine) };

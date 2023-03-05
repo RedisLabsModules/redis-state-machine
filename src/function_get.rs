@@ -16,11 +16,11 @@ pub(crate) fn get(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     let v = rkey.get_value::<StateMachine>(&REDIS_SM_TYPE)?;
 
     if v.is_none() {
-        Ok(RedisValue::Null)
-    } else {
-        let rval = serde_json::to_string(&v)?;
-        Ok(RedisValue::BulkString(rval))
+        return Ok(RedisValue::Null);
     }
+
+    let rval = serde_json::to_string(&v)?;
+    Ok(RedisValue::BulkString(rval))
 }
 
 pub(crate) fn template(_ctx: &Context, args: Vec<RedisString>) -> RedisResult {

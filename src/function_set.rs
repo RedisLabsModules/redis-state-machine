@@ -1,7 +1,7 @@
 use crate::rdb::REDIS_SM_TYPE;
-use crate::types::{StateMachine, new_from_string};
+use crate::types::{StateMachine, new_from_redisstring, new};
 use redis_module::{
-    key::RedisKeyWritable, Context, NextArg, RedisError, RedisResult, RedisString, RedisValue,
+    key::{RedisKeyWritable}, Context, NextArg, RedisError, RedisResult, RedisString, RedisValue,
     REDIS_OK,
 };
 
@@ -19,10 +19,10 @@ pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
         .next_arg()
         .unwrap_or_else(|_| RedisString::create(std::ptr::null_mut(), ""));
 
-    let mut rval: StateMachine = new_from_string(val)?;
+    let mut rval: StateMachine = new_from_redisstring(val)?;
 
     if !current.is_empty() {
-        rval.set_current(current.to_string());
+        rval.set_current_from_redisstring(current);
     }
     if rval.current().is_empty() {
         rval.set_current(rval.initial().to_string());
@@ -30,6 +30,21 @@ pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 
     let rkey = RedisKeyWritable::open(ctx.ctx, &key);
     rkey.set_value(&REDIS_SM_TYPE, rval)?;
+    REDIS_OK
+}
+
+pub(crate) fn create(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
+
+    if args.len() != 2 {
+        return Err(RedisError::WrongArity);
+    }
+
+    let mut args = args.into_iter().skip(1);
+    let key = args.next_arg()?;
+
+    let sm = new();
+    let rkey = RedisKeyWritable::open(ctx.ctx, &key);
+    rkey.set_value(&REDIS_SM_TYPE, sm)?;
     REDIS_OK
 }
 
@@ -47,7 +62,6 @@ pub(crate) fn reset(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 
     if let Some(rval) = v {
         rval.set_current(rval.initial().to_string());
-        rkey.set_value(&REDIS_SM_TYPE, rval)?;
         REDIS_OK
     } else {
         Ok(RedisValue::Null)
@@ -66,10 +80,8 @@ pub(crate) fn force_set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 
     let rkey = RedisKeyWritable::open(ctx.ctx, &key);
     let v = rkey.get_value::<StateMachine>(&REDIS_SM_TYPE)?;
-
     if let Some(rval) = v {
-        rval.set_current(state.to_string());
-        rkey.set_value(&REDIS_SM_TYPE, rval)?;
+        rval.set_current_from_redisstring(state);
         REDIS_OK
     } else {
         Ok(RedisValue::Null)
