@@ -47,7 +47,7 @@ unsafe extern "C" fn rdb_load(rdb: *mut raw::RedisModuleIO, _encver: c_int) -> *
     let ff = sm.unwrap();
     let bb = Box::new(ff);
     let rawbox = Box::into_raw(bb);
-    return rawbox as *mut c_void;
+    rawbox as *mut c_void
 }
 
 unsafe extern "C" fn mem_usage(value: *const c_void) -> usize {

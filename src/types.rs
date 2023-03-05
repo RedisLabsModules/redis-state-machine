@@ -12,18 +12,16 @@ pub(crate) struct StateMachine {
 }
 
 pub(crate) fn new_from_redisstring(c: RedisString) -> Result<StateMachine, Error> {
-    let rval = serde_json::from_str(&c.to_string());
-    return rval;
+    serde_json::from_str(&c.to_string())
 }
 
 pub(crate) fn new() -> StateMachine {
     let m: HashMap<String, Vec<String>> = HashMap::new();
-    let sm = StateMachine {
+    StateMachine {
         initial: String::from(""),
         current: String::from(""),
         map: m,
-    };
-    return sm;
+    }
 }
 
 impl StateMachine {
