@@ -1,0 +1,84 @@
+name: Build and test
+
+on:
+  workflow_class:
+    inputs:
+      packagedredis_version:
+        required: false
+        type: string
+        default: 7.0.9-1
+      container_name:
+        required: true
+        type: string
+      osnick:
+        required: true
+        type: string
+        default: focal
+      osversion:
+        required: true
+        type: string
+        default: ubuntu20.04
+      arch:
+        required: false
+        type: string
+        default: x86_64
+
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+
+jobs:
+  build:
+    name: ${{inputs.container_name}} ${{inputs.arch}}
+    runs-on: ubuntu-latest
+    container_name: ${{inputs.container_name}}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: stable
+      - uses: actions/setup-python@v4
+        with:
+          cache: 'pip'
+      - name: install test deps
+        run: pip install -r tests/requirements.txt
+
+      - name: download and extract redis
+        run: |
+          wget http://redismodules.s3.amazonaws.com/redis-stack/dependencies/redis-${{input.packagedredis_version}}-Linux-${{input.osversion}}-${{input.arch}}.tgz -O redis.tgz
+          tar -xpf redis.tgz
+          mv redis-${{inputs.redisversion}}-Linux-${{input.osnick}}-${{inputs.arch}} redis
+          chmod a+x redis/*
+
+      - name: build debug
+        run:
+          cargo build
+      - name: build release
+        run:
+          cargo build --release
+
+      - name: run tests
+        run: |
+          redis/redis-server --daemonize yes --loadmodule target/debug/libredis_state.so
+          pytest --junit-xml=results.xml
+
+      - uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Test Results ${{inputs.osnick}} ${{inputs.arch}}
+          path: '*.xml'
+          reporter: java-junit
+          list-suites: all
+          list-tests: all
+          max-annotations: 10
+
+      - uses: s3-actions/s3cmd@v1.2.0
+        with:
+          provider: aws
+          region: us-east-1
+          access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+

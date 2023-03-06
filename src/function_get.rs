@@ -1,4 +1,4 @@
-use crate::types::{StateMachine, new};
+use crate::types::{new, StateMachine};
 use crate::REDIS_SM_TYPE;
 use redis_module::{
     key::RedisKey, Context, NextArg, RedisError, RedisResult, RedisString, RedisValue,

@@ -1,7 +1,7 @@
 use crate::rdb::REDIS_SM_TYPE;
-use crate::types::{StateMachine, new_from_redisstring, new};
+use crate::types::{new, new_from_redisstring, StateMachine};
 use redis_module::{
-    key::{RedisKeyWritable}, Context, NextArg, RedisError, RedisResult, RedisString, RedisValue,
+    key::RedisKeyWritable, Context, NextArg, RedisError, RedisResult, RedisString, RedisValue,
     REDIS_OK,
 };
 
@@ -34,7 +34,6 @@ pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 }
 
 pub(crate) fn create(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
-
     if args.len() != 2 {
         return Err(RedisError::WrongArity);
     }

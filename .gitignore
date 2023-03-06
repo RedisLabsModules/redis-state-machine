@@ -5,3 +5,5 @@ target
 .vscode
 *.rdb
 *.pyc
+redis
+*.tgz

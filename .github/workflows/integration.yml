@@ -8,26 +8,76 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  REDIS_VERISON: 7.0.9-1
 
 jobs:
 
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ATiltedTree/setup-rust@v1
-        with:
-          rust-version: stable
-      - uses: actions/setup-python@v4
-        with:
-          cache: 'pip'
-      - name: install test deps
-        run: pip install -r tests/requirements.txt
+  x86-jammy:
+    uses: ./.github/workflows/REUSABLE.yml
+    with:
+      container_name: ubuntu:jammy
+      osversion: ubuntu22.04
+      osnicK: jammy
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: build debug
-        run:
-          cargo build
+  x86-focal:
+    uses: ./.github/workflows/REUSABLE.yml
+    with:
+      container_name: ubuntu:focal
+      osversion: ubuntu20.04
+      osnicK: focal
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: build release
-        run:
-          cargo build --release
+  x86-bionic:
+    uses: ./.github/workflows/REUSABLE.yml
+    with:
+      container_name: ubuntu:bionic
+      osversion: ubuntu18.04
+      osnicK: bionic
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  x86-xenial:
+    uses: ./.github/workflows/REUSABLE.yml
+    with:
+      container_name: ubuntu:xenial
+      osversion: ubuntu16.04
+      osnicK: xenial
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  x86-bullseye:
+    uses: ./.github/workflows/REUSABLE.yml
+    with:
+      container_name: debian:bullseye
+      osversion: bullseye
+      osnicK: bullseye
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  x86-rhel7:
+    uses: ./.github/workflows/REUSABLE.yml
+    with:
+      container_name: centos:7
+      osversion: rhel7
+      osnicK: rhel7
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  x86-rhel8:
+    uses: ./.github/workflows/REUSABLE.yml
+    with:
+      container_name: rockylinux:8
+      osversion: rhel8
+      osnicK: rhel8
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

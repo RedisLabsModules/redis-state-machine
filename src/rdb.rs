@@ -3,9 +3,9 @@ use redis_module::{native_types::RedisType, RedisModuleTypeMethods, REDISMODULE_
 use redis_module::raw;
 use std::mem;
 use std::os::raw::{c_int, c_void};
-use std::ptr::{null_mut};
+use std::ptr::null_mut;
 
-use crate::types::{StateMachine, new_from_redisstring};
+use crate::types::{new_from_redisstring, StateMachine};
 
 pub(crate) static REDIS_SM_VERSION: i32 = 1;
 pub(crate) static REDIS_SM_TYPE: RedisType = RedisType::new(
@@ -14,7 +14,7 @@ pub(crate) static REDIS_SM_TYPE: RedisType = RedisType::new(
     RedisModuleTypeMethods {
         version: redis_module::TYPE_METHOD_VERSION,
         rdb_load: Some(rdb_load),
-        rdb_save: Some(rdb_save), 
+        rdb_save: Some(rdb_save),
         aof_rewrite: None,
         free: Some(free),
         mem_usage: Some(mem_usage),
@@ -30,12 +30,12 @@ pub(crate) static REDIS_SM_TYPE: RedisType = RedisType::new(
 );
 
 unsafe extern "C" fn rdb_save(rdb: *mut raw::RedisModuleIO, value: *mut c_void) {
-    let v= &*value.cast::<StateMachine>();
+    let v = &*value.cast::<StateMachine>();
     raw::save_string(rdb, &serde_json::to_string(&v).unwrap());
 }
 
 unsafe extern "C" fn rdb_load(rdb: *mut raw::RedisModuleIO, _encver: c_int) -> *mut c_void {
-    let v= raw::load_string(rdb);
+    let v = raw::load_string(rdb);
     if v.is_err() {
         return null_mut();
     }
