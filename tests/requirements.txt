@@ -1,2 +1,4 @@
 pytest
 redis
+ramp-packer
+s3cmd

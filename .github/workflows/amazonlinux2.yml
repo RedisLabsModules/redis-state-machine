@@ -9,6 +9,7 @@ on:
 env:
   CARGO_TERM_COLOR: always
   REDISVERSION: 7.0.9-1
+  VERSION: 99.99.99
 
 jobs:
 
@@ -44,12 +45,12 @@ jobs:
           chmod a+x redis/*
 
       - name: build debug
-        run:
+        run: |
           . scl_source enable llvm-toolset-7 || true
           make
 
       - name: build release
-        run:
+        run: |
           . scl_source enable llvm-toolset-7 || true
           make RELEASE=1
 
@@ -58,9 +59,11 @@ jobs:
           redis/redis-server --daemonize yes --loadmodule target/debug/libredis_state.so
           /opt/rh/rh-python38/root/usr/bin/pytest --junit-xml=results.xml
 
-      - uses: s3-actions/s3cmd@v1.2.0
-        with:
-          provider: aws
-          region: us-east-1
-          access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: dist ramp to s3
+        run: |
+          ramp pack -m ramp.yml target/release/libredis_state.so -o libredis_state.Linux-${{env.osnick}}-${{env.arch}}.${{env.VERSION}}.zip
+          s3cmd --access_key=${{secrets.AWS_ACCESS_KEY_ID}} \
+            --secret_key=${{secrets.AWS_SECRET_ACCESS_KEY}} \
+            --region=${{secrets.AWS_REGION}} \
+            put -P *.zip \
+            s3://redismodules/redisstatemachine/snapshots
