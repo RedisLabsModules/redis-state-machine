@@ -27,6 +27,7 @@ jobs:
           cache: 'pip'
       - name: install test deps
         run: |
+          brew install openssl@3
           pip install -r tests/requirements.txt
           wget -q https://redismodules.s3.amazonaws.com/redis-stack/dependencies/redis-${{env.REDISVERSION}}-macos-${{env.osnick}}-${{env.arch}}.tgz -O redis.tgz
           tar -xpf redis.tgz

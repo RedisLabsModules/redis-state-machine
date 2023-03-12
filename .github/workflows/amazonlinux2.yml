@@ -22,8 +22,10 @@ jobs:
       - name: os deps
         run: |
           yum groupinstall -yqq 'Development Tools'
-          yum install -yqq wget centos-release-scl devtoolset-9 llvm-toolset-7 centos-release-scl-rh
-          yum install -yqq rh-python38-python rh-python38-python-pip clang-devel
+          yum install -yqq wget centos-release-scl centos-release-scl-rh
+          yum install -yqq devtoolset-9 llvm-toolset-7
+          yum install -yqq rh-python38-python rh-python38-python-pip openssl-devel
+
       - uses: actions/checkout@v3
       - uses: ATiltedTree/setup-rust@v1
         with:
@@ -40,10 +42,14 @@ jobs:
 
       - name: build debug
         run:
+          . scl_source enable devtoolset-9
+          . scl_source enable llvm-toolset-7
           make
 
       - name: build release
         run:
+          . scl_source enable devtoolset-9
+          . scl_source enable llvm-toolset-7
           make RELEASE=1
 
       - name: run tests

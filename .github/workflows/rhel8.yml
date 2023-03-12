@@ -26,7 +26,7 @@ jobs:
       - name: os deps
         run: |
           yum groupinstall -yqq 'Development Tools'
-          yum install -yqq python38-devel python38 wget clang clang-devel
+          yum install -yqq python38-devel python38 wget clang clang-devel openssl-devel
       - name: install test deps
         run: |
           pip3 install -r tests/requirements.txt
