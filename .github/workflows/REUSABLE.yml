@@ -53,7 +53,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           cache: 'pip'
-        python-version: ${{inputs.pythonversion}}
+          python-version: ${{inputs.pythonversion}}
 
       - name: install test deps
         run: pip install -r tests/requirements.txt
