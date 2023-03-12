@@ -18,6 +18,7 @@ jobs:
       image_name: ubuntu:jammy
       osversion: ubuntu22.04
       osnick: jammy
+      build_deps: apt-get update && apt-get install -y wget curl make
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -28,6 +29,7 @@ jobs:
       image_name: ubuntu:focal
       osversion: ubuntu20.04
       osnick: focal
+      build_deps: apt-get update && apt-get install -y wget curl make
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -38,6 +40,7 @@ jobs:
       image_name: ubuntu:bionic
       osversion: ubuntu18.04
       osnick: bionic
+      build_deps: apt-get update && apt-get install -y wget curl make
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -48,6 +51,7 @@ jobs:
       image_name: ubuntu:xenial
       osversion: ubuntu16.04
       osnick: xenial
+      build_deps: apt-get update && apt-get install -y wget curl make
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -58,6 +62,7 @@ jobs:
       image_name: debian:bullseye
       osversion: bullseye
       osnick: bullseye
+      build_deps: apt-get update && apt-get install -y wget curl
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -68,6 +73,9 @@ jobs:
       image_name: centos:7
       osversion: rhel7
       osnick: rhel7
+      build_deps: |
+        yum install -y epel-release
+        yum install -y make wget
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -78,6 +86,9 @@ jobs:
       image_name: rockylinux:8
       osversion: rhel8
       osnick: rhel8
+      build_deps: |
+        yum install -y epel-release
+        yum install -y make wget
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
