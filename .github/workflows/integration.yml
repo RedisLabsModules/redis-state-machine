@@ -62,7 +62,7 @@ jobs:
       image_name: debian:bullseye
       osversion: bullseye
       osnick: bullseye
-      build_deps: apt-get update && apt-get install -y wget curl git redhat-lsb-core
+      build_deps: apt-get update && apt-get install -y wget curl git lsb-release
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -75,7 +75,7 @@ jobs:
       osnick: rhel7
       build_deps: |
         yum install -y epel-release
-        yum install -y make wget git
+        yum install -y make wget git redhat-lsb-core
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

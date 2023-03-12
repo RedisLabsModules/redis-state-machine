@@ -38,7 +38,8 @@ on:
 
 jobs:
   build:
-    name: ${{inputs.image_name}} ${{inputs.arch}}
+
+    name: ${{inputs.osnick}} ${{inputs.arch}}
     runs-on: ubuntu-latest
     container: ${{inputs.image_name}}
 
@@ -52,7 +53,6 @@ jobs:
           rust-version: stable
       - uses: actions/setup-python@v4
         with:
-          cache: 'pip'
           python-version: ${{inputs.pythonversion}}
 
       - name: install test deps
@@ -93,4 +93,3 @@ jobs:
           region: us-east-1
           access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
