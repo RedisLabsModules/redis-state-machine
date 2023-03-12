@@ -27,7 +27,7 @@ jobs:
         run: |
           yum groupinstall -yqq 'Development Tools'
           yum install -yqq wget centos-release-scl devtoolset-9 llvm-toolset-7 centos-release-scl-rh
-          yum install -yqq rh-python38-python rh-python38-python-pip
+          yum install -yqq rh-python38-python rh-python38-python-pip clang-devel
       - name: install test deps
         run: |
           /opt/rh/rh-python38/root/usr/bin/pip install -r tests/requirements.txt
