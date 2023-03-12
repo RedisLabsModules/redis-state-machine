@@ -1,7 +1,7 @@
 name: Build and test
 
 on:
-  workflow_class:
+  workflow_call:
     inputs:
       packagedredis_version:
         required: false
