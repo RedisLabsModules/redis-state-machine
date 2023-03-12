@@ -17,7 +17,7 @@ jobs:
     with:
       container_name: ubuntu:jammy
       osversion: ubuntu22.04
-      osnicK: jammy
+      osnick: jammy
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -27,7 +27,7 @@ jobs:
     with:
       container_name: ubuntu:focal
       osversion: ubuntu20.04
-      osnicK: focal
+      osnick: focal
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -37,7 +37,7 @@ jobs:
     with:
       container_name: ubuntu:bionic
       osversion: ubuntu18.04
-      osnicK: bionic
+      osnick: bionic
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -47,7 +47,7 @@ jobs:
     with:
       container_name: ubuntu:xenial
       osversion: ubuntu16.04
-      osnicK: xenial
+      osnick: xenial
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -57,7 +57,7 @@ jobs:
     with:
       container_name: debian:bullseye
       osversion: bullseye
-      osnicK: bullseye
+      osnick: bullseye
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -67,7 +67,7 @@ jobs:
     with:
       container_name: centos:7
       osversion: rhel7
-      osnicK: rhel7
+      osnick: rhel7
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -77,7 +77,7 @@ jobs:
     with:
       container_name: rockylinux:8
       osversion: rhel8
-      osnicK: rhel8
+      osnick: rhel8
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

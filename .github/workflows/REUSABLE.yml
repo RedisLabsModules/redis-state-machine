@@ -48,9 +48,9 @@ jobs:
 
       - name: download and extract redis
         run: |
-          wget http://redismodules.s3.amazonaws.com/redis-stack/dependencies/redis-${{input.packagedredis_version}}-Linux-${{input.osversion}}-${{input.arch}}.tgz -O redis.tgz
+          wget http://redismodules.s3.amazonaws.com/redis-stack/dependencies/redis-${{inputs.packagedredis_version}}-Linux-${{inputs.osversion}}-${{inputs.arch}}.tgz -O redis.tgz
           tar -xpf redis.tgz
-          mv redis-${{inputs.redisversion}}-Linux-${{input.osnick}}-${{inputs.arch}} redis
+          mv redis-${{inputs.redisversion}}-Linux-${{inputs.osnick}}-${{inputs.arch}} redis
           chmod a+x redis/*
 
       - name: build debug
