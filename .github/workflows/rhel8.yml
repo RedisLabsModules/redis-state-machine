@@ -1,0 +1,67 @@
+name: Jammy
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  CARGO_TERM_COLOR: always
+  REDISVERSION: 7.0.9-1
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    container: rockylinux:8
+    env:
+      osnick: rhel7
+      arch: x86_64
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: stable
+      - name: os deps
+        run: |
+          yum groupinstall -yqq 'Development Tools'
+          yum install -yqq wget make git python38-devel python38 redhat-lsb
+      - name: install test deps
+        run: |
+          pip3 install -r tests/requirements.txt
+          wget -q https://redismodules.s3.amazonaws.com/redis-stack/dependencies/redis-${{env.REDISVERSION}}-Linux-${{env.osnick}}-${{env.arch}}.tgz -O redis.tgz
+          tar -xpf redis.tgz
+          rm *.tgz
+          mv redis* redis
+          chmod a+x redis/*
+
+      - name: build debug
+        run:
+          make
+
+      - name: build release
+        run:
+          make RELEASE=1
+
+      - name: run tests
+        run: |
+          redis/redis-server --daemonize yes --loadmodule target/debug/libredis_state.so
+          pytest --junit-xml=results.xml
+
+      - uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Test Results ${{env.osnick}} ${{env.arch}}
+          path: '*.xml'
+          reporter: java-junit
+          list-suites: all
+          list-tests: all
+          max-annotations: 10
+
+      - uses: s3-actions/s3cmd@v1.2.0
+        with:
+          provider: aws
+          region: us-east-1
+          access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
