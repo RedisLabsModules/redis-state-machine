@@ -1,4 +1,4 @@
-name: CI
+name: Focal
 
 on:
   push:
@@ -13,7 +13,7 @@ env:
 jobs:
 
   build:
-    runs-on: ubuntu-focal
+    runs-on: ubuntu-20.04
     env:
       osnick: ubuntu20.04
       arch: x86_64

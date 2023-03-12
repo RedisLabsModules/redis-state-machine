@@ -1,4 +1,4 @@
-name: CI
+name: Bionic
 
 on:
   push:
@@ -13,7 +13,7 @@ env:
 jobs:
 
   build:
-    runs-on: ubuntu-bionic
+    runs-on: ubuntu-18.04
     env:
       osnick: ubuntu18.04
       arch: x86_64
