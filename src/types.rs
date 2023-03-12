@@ -25,7 +25,6 @@ pub(crate) fn new() -> StateMachine {
 }
 
 impl StateMachine {
-
     pub(crate) fn set_current(&mut self, c: String) {
         self.current = c;
     }
