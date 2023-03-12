@@ -58,6 +58,7 @@ jobs:
 
       - name: dist ramp to s3
         run: |
+          export PATH=`pwd`/redis:$PATH
           ramp pack -m ramp.yml target/release/libredis_state.so -o libredis_state.Linux-${{env.osnick}}-${{env.arch}}.${{env.VERSION}}.zip
           s3cmd --access_key=${{secrets.AWS_ACCESS_KEY_ID}} \
             --secret_key=${{secrets.AWS_SECRET_ACCESS_KEY}} \
