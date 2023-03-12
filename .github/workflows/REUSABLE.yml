@@ -38,6 +38,9 @@ jobs:
     runs-on: ubuntu-latest
     container: ${{inputs.image_name}}
 
+    env:
+      pythonversion: "3.10"
+
     steps:
       - uses: actions/checkout@v3
       - name: install dependencies
