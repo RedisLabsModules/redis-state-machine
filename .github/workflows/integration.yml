@@ -15,7 +15,7 @@ jobs:
   x86-jammy:
     uses: ./.github/workflows/REUSABLE.yml
     with:
-      container_name: ubuntu:jammy
+      image_name: ubuntu:jammy
       osversion: ubuntu22.04
       osnick: jammy
     secrets:
@@ -25,7 +25,7 @@ jobs:
   x86-focal:
     uses: ./.github/workflows/REUSABLE.yml
     with:
-      container_name: ubuntu:focal
+      image_name: ubuntu:focal
       osversion: ubuntu20.04
       osnick: focal
     secrets:
@@ -35,7 +35,7 @@ jobs:
   x86-bionic:
     uses: ./.github/workflows/REUSABLE.yml
     with:
-      container_name: ubuntu:bionic
+      image_name: ubuntu:bionic
       osversion: ubuntu18.04
       osnick: bionic
     secrets:
@@ -45,7 +45,7 @@ jobs:
   x86-xenial:
     uses: ./.github/workflows/REUSABLE.yml
     with:
-      container_name: ubuntu:xenial
+      image_name: ubuntu:xenial
       osversion: ubuntu16.04
       osnick: xenial
     secrets:
@@ -55,7 +55,7 @@ jobs:
   x86-bullseye:
     uses: ./.github/workflows/REUSABLE.yml
     with:
-      container_name: debian:bullseye
+      image_name: debian:bullseye
       osversion: bullseye
       osnick: bullseye
     secrets:
@@ -65,7 +65,7 @@ jobs:
   x86-rhel7:
     uses: ./.github/workflows/REUSABLE.yml
     with:
-      container_name: centos:7
+      image_name: centos:7
       osversion: rhel7
       osnick: rhel7
     secrets:
@@ -75,7 +75,7 @@ jobs:
   x86-rhel8:
     uses: ./.github/workflows/REUSABLE.yml
     with:
-      container_name: rockylinux:8
+      image_name: rockylinux:8
       osversion: rhel8
       osnick: rhel8
     secrets:
