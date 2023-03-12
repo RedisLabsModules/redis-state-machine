@@ -33,7 +33,7 @@ jobs:
   build:
     name: ${{inputs.image_name}} ${{inputs.arch}}
     runs-on: ubuntu-latest
-    image_name: ${{inputs.image_name}}
+    container: ${{inputs.image_name}}
 
     steps:
       - uses: actions/checkout@v3
