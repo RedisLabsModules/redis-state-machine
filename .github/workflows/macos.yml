@@ -1,4 +1,4 @@
-name: Jammy
+name: macos
 
 on:
   push:
