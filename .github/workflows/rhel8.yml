@@ -25,9 +25,6 @@ jobs:
       - uses: ATiltedTree/setup-rust@v1
         with:
           rust-version: stable
-      - uses: actions/setup-python@v4
-        with:
-          cache: 'pip'
       - name: install test deps
         run: |
           make deps ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
