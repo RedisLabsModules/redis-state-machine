@@ -79,22 +79,6 @@
             }
         ]
     },
-    "SM.FORCE": {
-        "summary": "Forces the state machine into a named state",
-        "since": "0.1.0",
-        "complexity": "O(N)",
-        "group": "statemachine",
-        "arguments": [
-            {
-                "name": "key",
-                "type": "key"
-            },
-            {
-                "name": "state",
-                "type": "string"
-            }
-        ]
-    },
     "SM.CREATE": {
         "summary": "Creates a blank state machine and stores it in the named key",
         "since": "0.1.0",
@@ -112,5 +96,33 @@
         "since": "0.1.0",
         "complexity": "O(1)",
         "group": "statemachine"
+    },
+    "SM.TRANSITION": {
+        "summary": "Transition the state machine to the specific state",
+        "since": "0.1.0",
+        "complexity": "O(1)",
+        "group": "statemachine",
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key"
+            },
+            {
+                "name": "state",
+                "type": "string"
+            },
+            {
+                "name": "codition",
+                "type": "string",
+                "optional": true,
+                "arguments": [
+                    {
+                        "name": "force",
+                        "type": "pure-token",
+                        "token": "F"
+                    }
+                ]
+            }
+        ]
     }
 }

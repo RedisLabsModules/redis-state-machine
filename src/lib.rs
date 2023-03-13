@@ -26,9 +26,8 @@ redis_module! {
         ["SM.DEL", function_delete::delete, "write", 1, 1, 1],
         ["SM.CREATE", function_set::create, "write deny-oom", 1, 1, 1],
         ["SM.TEMPLATE", function_get::template, "readonly", 0, 0, 0],
-        ["SM.FORCE", function_set::force_set, "write deny-oom", 1, 1, 1],
+        // ["SM.FORCE", function_set::force_set, "write deny-oom", 1, 1, 1],
         ["SM.RESET", function_set::reset, "write deny-oom", 1, 1, 1],
-
-        // ["SM.GO", function_state::go "write deny-oom", 1, 1, 1],
+        ["SM.TRANSITION", function_state::transition, "write deny-oom", 1, 1, 1],
     ],
 }

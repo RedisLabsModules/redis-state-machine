@@ -22,7 +22,7 @@ pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
     let mut rval: StateMachine = new_from_redisstring(val)?;
 
     if !current.is_empty() {
-        rval.set_current_from_redisstring(current);
+        rval.set_current(current.to_string());
     }
     if rval.current().is_empty() {
         rval.set_current(rval.initial().to_string());
@@ -61,26 +61,6 @@ pub(crate) fn reset(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 
     if let Some(rval) = v {
         rval.set_current(rval.initial().to_string());
-        REDIS_OK
-    } else {
-        Ok(RedisValue::Null)
-    }
-}
-
-// Force set the named state machine to a value
-pub(crate) fn force_set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
-    if args.len() != 3 {
-        return Err(RedisError::WrongArity);
-    }
-
-    let mut args = args.into_iter().skip(1);
-    let key = args.next_arg()?;
-    let state = args.next_arg()?;
-
-    let rkey = RedisKeyWritable::open(ctx.ctx, &key);
-    let v = rkey.get_value::<StateMachine>(&REDIS_SM_TYPE)?;
-    if let Some(rval) = v {
-        rval.set_current_from_redisstring(state);
         REDIS_OK
     } else {
         Ok(RedisValue::Null)

@@ -29,8 +29,14 @@ impl StateMachine {
         self.current = c;
     }
 
-    pub(crate) fn set_current_from_redisstring(&mut self, c: RedisString) {
-        self.current = c.to_string();
+    pub(crate) fn check_transition(&self, target: String) -> bool {
+        let current = String::from(self.current());
+        let mapval = self.map.get(&current);
+        if mapval.is_none() {
+            return false;
+        }
+        let v = mapval.unwrap();
+        v.contains(&target)
     }
 
     pub(crate) fn current(&self) -> &str {

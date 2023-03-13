@@ -98,18 +98,18 @@ def test_reset(r):
     assert r.execute_command("SM.CURRENT", "foostates") == initial
 
 
-def test_force_set(r):
-    r.flushdb()
-    initial = "begin"
-    mapstates = {
-        "a": ["this", "maps", "states"],
-        "b": ["this", "too", "maps", "somewhere"],
-    }
-    validmap = {"initial": initial, "map": mapstates, "current": "maps"}
-    assert r.execute_command("SM.SET", "foostates", json.dumps(validmap))
-    assert r.execute_command("SM.FORCE", "foostates", "too")
+# def test_force_set(r):
+#     r.flushdb()
+#     initial = "begin"
+#     mapstates = {
+#         "a": ["this", "maps", "states"],
+#         "b": ["this", "too", "maps", "somewhere"],
+#     }
+#     validmap = {"initial": initial, "map": mapstates, "current": "maps"}
+#     assert r.execute_command("SM.SET", "foostates", json.dumps(validmap))
+#     assert r.execute_command("SM.FORCE", "foostates", "too")
 
-    assert r.execute_command("SM.CURRENT", "foostates") == "too"
+#     assert r.execute_command("SM.CURRENT", "foostates") == "too"
 
 
 def test_create(r):
@@ -133,3 +133,24 @@ def test_template(r):
     assert val["initial"] == ""
     assert val["map"] == {}
     assert val["current"] == ""
+
+def test_transition(r):
+    r.flushdb()
+    initial = "begin"
+    current = "begin"
+    mapstates = {
+        "a": ["this", "maps", "states"],
+        "b": ["this", "too", "maps", "somewhere"],
+        "begin": ["too", "maps"],
+    }
+    
+    valid_with_current = {"initial": initial, "map": mapstates, "current": current}
+    assert r.execute_command("SM.SET", "bar", json.dumps(valid_with_current))
+    assert r.execute_command("SM.TRANSITION", "bar", "smurfy") == None
+    assert r.execute_command("SM.TRANSITION", "bar", "too")
+
+    # force state
+    r.flushdb()
+    assert r.execute_command("SM.SET", "bar", json.dumps(valid_with_current))
+    assert r.execute_command("SM.TRANSITION", "bar", "banna", "foo") == None
+    assert r.execute_command("SM.TRANSITION", "bar", "banna", "F")
