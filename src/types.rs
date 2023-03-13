@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Error;
 use std::collections::HashMap;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub(crate) struct StateMachine {
     current: String,
     map: HashMap<String, Vec<String>>,

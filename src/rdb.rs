@@ -57,7 +57,10 @@ unsafe extern "C" fn mem_usage(value: *const c_void) -> usize {
 
 #[allow(unused)]
 unsafe extern "C" fn free(value: *mut c_void) {
-    let sm = unsafe { value as *mut StateMachine };
+    if value.is_null() {
+        return;
+    }
+    let sm =  value as *mut StateMachine ;
     Box::from_raw(sm);
 }
 
@@ -67,6 +70,7 @@ unsafe extern "C" fn copy(
     tokey: *mut raw::RedisModuleString,
     value: *const c_void,
 ) -> *mut c_void {
-    let sm = unsafe { &*(value as *mut StateMachine) };
-    Box::into_raw(Box::new(sm)).cast::<c_void>()
+    let sm =  &*(value as *mut StateMachine) ;
+    let newSm = sm.clone();
+    Box::into_raw(Box::new(newSm)).cast::<c_void>()
 }
