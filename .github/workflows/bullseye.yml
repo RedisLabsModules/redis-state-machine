@@ -19,6 +19,7 @@ jobs:
       arch: x86_64
       os: Linux
     steps:
+      - run: apt update && apt install -y git wget
       - uses: actions/checkout@v3
       - uses: ATiltedTree/setup-rust@v1
         with:
