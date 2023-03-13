@@ -1,0 +1,59 @@
+name: RHEL7
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    container: centos:7
+    env:
+      osnick: rhel7
+      arch: x86_64
+      os: Linux
+    steps:
+      - run: yum install -y git
+      - uses: actions/checkout@v3
+      - run: sh .github/scripts/${{env.osnick}}.sh
+      - uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: stable
+      - name: install test deps
+        run: |
+          export PATH=/opt/rh/rh-python38/root/usr/local/bin:/opt/rh/rh-python38/root/usr/bin:$PATH
+          make deps ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
+
+      - name: build debug
+        run: |
+          . scl_source enable devtoolset-9 || true
+          . scl_source enable llvm-toolset-7 || true
+          make ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
+
+      - name: build release
+        run: |
+          . scl_source enable devtoolset-9 || true
+          . scl_source enable llvm-toolset-7 || true
+          make RELEASE=1 ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
+
+      - name: run tests
+        run: |
+          . scl_source enable llvm-toolset-7 || true
+          export PATH=/opt/rh/rh-python38/root/usr/local/bin:$PATH
+          make bgtest
+
+      - name: dist ramp to s3
+        run: |
+          . scl_source enable llvm-toolset-7 || true
+          export PATH=`pwd`/redis:/opt/rh/rh-python38/root/usr/bin:/opt/rh/rh-python38/root/usr/local/bin:$PATH
+          make pack AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}} \
+            AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} \
+            AWS_REGION=${{secrets.AWS_REGION}} \
+            OS=${{env.os}} OSNICK=${{env.osnick}} ARCH=${{env.arch}} \
+            PUBLISH=1

@@ -1,0 +1,49 @@
+name: OSX Intel
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      osnick: catalina
+      arch: x86_64
+      os: macos
+    steps:
+      - uses: actions/checkout@v3
+      - run: sh .github/scripts/${{env.os}}-${{env.arch}}.sh
+      - uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: stable
+
+      - name: install test deps
+        run: |
+          make deps ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
+
+      - name: build debug
+        run: |
+          make ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
+
+      - name: build release
+        run: |
+          make ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}} RELEASE=1
+
+      - name: run tests
+        run: |
+          make bgtest
+
+      - name: dist ramp to s3
+        run: |
+          export PATH=`pwd`/redis:$PATH
+          make pack AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}} \
+            AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} \
+            AWS_REGION=${{secrets.AWS_REGION}} \
+            OS=${{env.os}} OSNICK=${{env.osnick}} ARCH=${{env.arch}} \
+            PUBLISH=1

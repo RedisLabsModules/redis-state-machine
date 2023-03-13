@@ -1,0 +1,20 @@
+display_name: RedisStateMachine
+description: A state machine capability for your services and data
+author: RedisLabs
+email: oss@redis.com
+homepage: 'https://redis.io'
+license: Redis Source Available License Agreement
+command_line_args: libredis_state.so
+min_redis_verison: '7.0.0'
+min_redis_pack_version: '6.2.18'
+capabilities:
+  - types
+  - backup_restore
+  - ipv6
+  - intershard_tls
+  - intershard_tls_pass
+  - persistence_rdb
+  - persistence_aof
+  - failover_migrate
+  - replica_of
+  - clustering
