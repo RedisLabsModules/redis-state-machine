@@ -8,8 +8,6 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  REDISVERSION: 7.0.9-1
-  VERSION: 99.99.99
 
 jobs:
 
@@ -18,6 +16,7 @@ jobs:
     env:
       osnick: ubuntu22.04
       arch: x86_64
+      os: Linux
     steps:
       - uses: actions/checkout@v3
       - uses: ATiltedTree/setup-rust@v1
@@ -28,32 +27,25 @@ jobs:
           cache: 'pip'
       - name: install test deps
         run: |
-          pip install -r tests/requirements.txt
-          wget -q https://redismodules.s3.amazonaws.com/redis-stack/dependencies/redis-${{env.REDISVERSION}}-Linux-${{env.osnick}}-${{env.arch}}.tgz -O redis.tgz
-          tar -xpf redis.tgz
-          rm *.tgz
-          mv redis* redis
-          chmod a+x redis/*
+          make deps ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
 
       - name: build debug
         run:
-          make
+          make ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
 
       - name: build release
         run:
-          make RELEASE=1
+          make RELEASE=1 ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
 
       - name: run tests
         run: |
-          redis/redis-server --daemonize yes --loadmodule target/debug/libredis_state.so
-          pytest --junit-xml=results.xml
+          make bgtest
 
       - name: dist ramp to s3
         run: |
           export PATH=`pwd`/redis:$PATH
-          ramp pack -m ramp.yml target/release/libredis_state.so -o libredis_state.Linux-${{env.osnick}}-${{env.arch}}.${{env.VERSION}}.zip
-          s3cmd --access_key=${{secrets.AWS_ACCESS_KEY_ID}} \
-            --secret_key=${{secrets.AWS_SECRET_ACCESS_KEY}} \
-            --region=${{secrets.AWS_REGION}} \
-            put -P *.zip \
-            s3://redismodules/redisstatemachine/snapshots
+          make pack AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}} \
+            AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} \
+            AWS_REGION=${{secrets.AWS_REGION}} \
+            OS=${{env.os}} OSNICK=${{env.osnick}} ARCH=${{env.arch}} \
+            PUBLISH=1
