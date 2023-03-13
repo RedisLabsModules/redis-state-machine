@@ -1,4 +1,4 @@
-name: Ubuntu 22.04
+name: Ubuntu 20.04
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      osnick: ubuntu22.04
+      osnick: ubuntu20.04
       arch: x86_64
       os: Linux
     steps:
