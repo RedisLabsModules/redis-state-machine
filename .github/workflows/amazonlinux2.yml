@@ -1,4 +1,4 @@
-name: RHEL7
+name: AmazonLinux2
 
 on:
   push:
@@ -13,9 +13,9 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    container: centos:7
+    container: amazonlinux:2
     env:
-      osnick: rhel7
+      osnick: amzn
       arch: x86_64
       os: Linux
     steps:
@@ -32,13 +32,11 @@ jobs:
 
       - name: build debug
         run: |
-          . scl_source enable devtoolset-9 || true
           . scl_source enable llvm-toolset-7 || true
           make ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
 
       - name: build release
         run: |
-          . scl_source enable devtoolset-9 || true
           . scl_source enable llvm-toolset-7 || true
           make RELEASE=1 ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
 
