@@ -38,7 +38,7 @@ distclean:
 	rm -rf ${TARGETBASEDIR} dump.rdb redis *.zip
 
 deps:
-	pip install -r tests/requirements.txt
+	pip3 install -r tests/requirements.txt
 	wget -q https://redismodules.s3.amazonaws.com/redis-stack/dependencies/redis-${REDISVERSION}-${OS}-${OSNICK}-${ARCH}.tgz -O redis.tgz
 	tar -xpf redis.tgz
 	rm *.tgz
