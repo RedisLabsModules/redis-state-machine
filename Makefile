@@ -39,7 +39,7 @@ distclean:
 
 deps:
 	pip3 install -r tests/requirements.txt
-	wget -q https://redismodules.s3.amazonaws.com/redis-stack/dependencies/redis-${REDISVERSION}-${OS}-${OSNICK}-${ARCH}.tgz -O redis.tgz
+	curl -s https://redismodules.s3.amazonaws.com/redis-stack/dependencies/redis-${REDISVERSION}-${OS}-${OSNICK}-${ARCH}.tgz --output redis.tgz
 	tar -xpf redis.tgz
 	rm *.tgz
 	mv redis* redis

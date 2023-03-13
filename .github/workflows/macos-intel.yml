@@ -1,4 +1,4 @@
-name: Bullseye
+name: OSX Intel
 
 on:
   push:
@@ -10,32 +10,30 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-
   build:
-    runs-on: ubuntu-latest
-    container: debian:bullseye
+    runs-on: macos-latest
     env:
-      osnick: bullseye
+      osnick: catalina
       arch: x86_64
-      os: Linux
+      os: macos
     steps:
-      - run: apt update && apt install -y git wget
       - uses: actions/checkout@v3
-      - run: sh .github/scripts/${{env.osnick}}.sh
+      - run: sh .github/scripts/${{env.os}}-${{env.arch}}.sh
       - uses: ATiltedTree/setup-rust@v1
         with:
           rust-version: stable
+
       - name: install test deps
         run: |
           make deps ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
 
       - name: build debug
-        run:
+        run: |
           make ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
 
       - name: build release
-        run:
-          make RELEASE=1 ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
+        run: |
+          make ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}} RELEASE=1
 
       - name: run tests
         run: |
