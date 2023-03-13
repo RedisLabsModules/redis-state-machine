@@ -27,7 +27,7 @@ jobs:
           rust-version: stable
       - name: install test deps
         run: |
-          exporth PATH=/opt/rh/rh-python38/root/usr/local/bin:/opt/rh/rh-python38/root/usr/bin:$PATH
+          export PATH=/opt/rh/rh-python38/root/usr/local/bin:/opt/rh/rh-python38/root/usr/bin:$PATH
           make deps ARCH=${{env.arch}} OS=${{env.os}} OSNICK=${{env.osnick}}
 
       - name: build debug
@@ -44,7 +44,7 @@ jobs:
 
       - name: run tests
         run: |
-          exporth PATH=/opt/rh/rh-python38/root/usr/local/bin:$PATH
+          export PATH=/opt/rh/rh-python38/root/usr/local/bin:$PATH
           make bgtest
 
       - name: dist ramp to s3
