@@ -1,6 +1,6 @@
 # redis-state-machine
 
-[![CI](https://github.com/RedisLabsModules/redis-state-machine/actions/workflows/integration.yml/badge.svg)](https://github.com/RedisLabsModules/redis-state-machine/actions/workflows/integration.yml)
+[![Latest Release](https://img.shields.io/github/v/release/redislabsmodules/redisstatemachine?label=latest)](https://github.com/redislabsmodules/redisstatemachine/releases/latest)
 
 A [Redis module](https://redis.io/docs/modules) that maintains a state machine on the server side.
 
