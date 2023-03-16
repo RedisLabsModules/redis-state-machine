@@ -1,6 +1,7 @@
 # redis-state-machine
 
 [![Latest Release](https://img.shields.io/github/v/release/redislabsmodules/redis-state-machine?label=latest)](https://github.com/redislabsmodules/redis-state-machine/releases/latest)
+[![Dockerhub](https://img.shields.io/badge/dockerhub-redislabs/redisstatemachine-blue)](https://hub.docker.com/r/redislabs/redisstatemachine/tags/)
 
 A [Redis module](https://redis.io/docs/modules) that maintains a state machine on the server side.
 
@@ -69,7 +70,7 @@ r.execute_command("SM.SET", "mystatemachine", json.dumps(tmpl))
 If we try to change our statemachine to an invalid state, Redis returns a nil.
 
 ```python
-x = r.execute_command("SM.TRANSITION", "mystatemachine", "notastate")
+x = r.execute_command("SM.MUTATE", "mystatemachine", "notastate")
 print(x)
 >>> None
 ```
@@ -77,7 +78,7 @@ print(x)
 If we try to change states to a valid state, we receive an ok.
 
 ```python
-x = r.execute_command("SM.TRANSITION", "mystatemachine", "blee")
+x = r.execute_command("SM.MUTATE", "mystatemachine", "blee")
 print(x)
 >>> OK
 ```
