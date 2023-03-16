@@ -1,6 +1,6 @@
 # redis-state-machine
 
-[![Latest Release](https://img.shields.io/github/v/release/redislabsmodules/redisstatemachine?label=latest)](https://github.com/redislabsmodules/redisstatemachine/releases/latest)
+[![Latest Release](https://img.shields.io/github/v/release/redislabsmodules/redis-state-machine?label=latest)](https://github.com/redislabsmodules/redis-state-machine/releases/latest)
 
 A [Redis module](https://redis.io/docs/modules) that maintains a state machine on the server side.
 
