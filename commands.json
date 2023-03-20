@@ -1,16 +1,4 @@
 {
-    "SM.DEL": {
-        "summary": "Deletes a state machine",
-        "since": "0.1.0",
-        "complexity": "O(N)",
-        "group": "statemachine",
-        "arguments": [
-            {
-                "name": "key",
-                "type": "key"
-            }
-        ]
-    },
     "SM.GET": {
         "summary": "Gets a state machine, or the current state of a machine",
         "since": "0.1.0",
@@ -43,18 +31,6 @@
             }
         ]
     },
-    "SM.STATES": {
-        "summary": "Gets the current state associated with a state machine",
-        "since": "0.1.0",
-        "complexity": "O(N)",
-        "group": "statemachine",
-        "arguments": [
-            {
-                "name": "key",
-                "type": "key"
-            }
-        ]
-    },
     "SM.RESET": {
         "summary": "Resets a state machine to its initial state",
         "since": "0.1.0",
@@ -67,7 +43,7 @@
             }
         ]
     },
-    "SM.CURRENT": {
+    "SM.STATE": {
         "summary": "Retrieves the current state machine state",
         "since": "0.1.0",
         "complexity": "O(N)",
@@ -76,7 +52,20 @@
             {
                 "name": "key",
                 "type": "key"
+            },
+            {
+                "name": "codition",
+                "type": "string",
+                "optional": true,
+                "arguments": [
+                    {
+                        "name": "list",
+                        "type": "pure-token",
+                        "token": "LIST"
+                    }
+                ]
             }
+
         ]
     },
     "SM.CREATE": {
@@ -84,6 +73,7 @@
         "since": "0.1.0",
         "complexity": "O(N)",
         "group": "statemachine",
+        "arity": 2,
         "arguments": [
             {
                 "name": "key",
@@ -95,9 +85,10 @@
         "summary": "Return the json template used for constructing a state machine",
         "since": "0.1.0",
         "complexity": "O(1)",
-        "group": "statemachine"
+        "group": "statemachine",
+        "arity": 1
     },
-    "SM.TRANSITION": {
+    "SM.MUTATE": {
         "summary": "Transition the state machine to the specific state",
         "since": "0.1.0",
         "complexity": "O(1)",
@@ -119,7 +110,7 @@
                     {
                         "name": "force",
                         "type": "pure-token",
-                        "token": "F"
+                        "token": "FORCE"
                     }
                 ]
             }

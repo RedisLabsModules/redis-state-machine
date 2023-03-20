@@ -8,3 +8,4 @@ target
 libredis_state.so
 libredis_state.Linux-ubuntu20.04-x86_64.1.0.1.zip
 results.xml
+redis
