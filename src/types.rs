@@ -8,6 +8,7 @@ pub(crate) struct StateMachine {
     current: String,
     map: HashMap<String, Vec<String>>,
     initial: String,
+    reason: String,
     // TODO store some way for this to never change
 }
 
@@ -21,6 +22,7 @@ pub(crate) fn new() -> StateMachine {
         initial: String::from(""),
         current: String::from(""),
         map: m,
+        reason: String::from(""),
     }
 }
 
@@ -29,7 +31,11 @@ impl StateMachine {
         self.current = c;
     }
 
-    pub(crate) fn check_transition(&self, target: String) -> bool {
+    pub(crate) fn set_reason(&mut self, c: String) {
+        self.reason = c;
+    }
+
+    pub(crate) fn can_transition(&self, target: String) -> bool {
         let current = String::from(self.current());
         let mapval = self.map.get(&current);
         if mapval.is_none() {
@@ -37,6 +43,10 @@ impl StateMachine {
         }
         let v = mapval.unwrap();
         v.contains(&target)
+    }
+
+    pub(crate) fn is_valid_state(&self, target: String) -> bool {
+        self.map.contains_key(&target)
     }
 
     pub(crate) fn current(&self) -> &str {
@@ -49,5 +59,9 @@ impl StateMachine {
 
     pub(crate) const fn map(&self) -> &HashMap<String, Vec<String>> {
         &self.map
+    }
+
+    pub(crate) fn reason(&self) -> &str {
+        &self.reason
     }
 }

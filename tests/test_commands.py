@@ -3,6 +3,20 @@ import pytest
 import json
 
 
+def genmap():
+    """return a n empty hashmap"""
+    initial = "begin"
+    current = "begin"
+    mapstates = {
+        "a": ["this", "maps", "states"],
+        "b": ["this", "too", "maps", "somewhere"],
+        "begin": ["too", "maps"],
+        "too": ["b"],
+    }
+
+    return {"initial": initial, "map": mapstates, "current": current, "reason": ""}
+
+
 def test_invalid_set_get(r):
     r.flushdb()
     r.set("foo", "bar")
@@ -34,51 +48,43 @@ def test_set_get(r):
             "SM.SET", "foocurrent", json.dumps(invalid_no_current), current
         )
 
-    valid_with_current = {"initial": initial, "map": mapstates, "current": current}
-    assert r.execute_command("SM.SET", "bar", json.dumps(valid_with_current))
+    sm = genmap()
+    assert r.execute_command("SM.SET", "bar", json.dumps(sm))
 
     bar = json.loads(r.execute_command("SM.GET", "bar"))
-    assert bar == valid_with_current
+    assert bar == sm
 
 
 def test_get_current_state(r):
     r.flushdb()
-    initial = "begin"
-    mapstates = {
-        "a": ["this", "maps", "states"],
-        "b": ["this", "too", "maps", "somewhere"],
-    }
-    validmap = {"initial": initial, "map": mapstates, "current": "begin"}
-    assert r.execute_command("SM.SET", "fooforcurrent", json.dumps(validmap))
-    assert r.execute_command("SM.STATE", "fooforcurrent") == ["begin"]
+    assert r.execute_command("SM.SET", "fooforcurrent", json.dumps(genmap()))
+    assert r.execute_command("SM.STATE", "fooforcurrent") == [genmap()["current"]]
 
 
 def test_get_states(r):
     r.flushdb()
-    initial = "begin"
-    mapstates = {
-        "a": ["this", "maps", "states"],
-        "b": ["this", "too", "maps", "somewhere"],
-    }
-    validmap = {"initial": initial, "map": mapstates, "current": "too"}
-    assert r.execute_command("SM.SET", "foostates", json.dumps(validmap))
+    sm = genmap()
+    assert r.execute_command("SM.SET", "foostates", json.dumps(sm))
     states = r.execute_command("SM.STATE", "foostates", "list")
 
-    mapkeys = list(mapstates.keys())
+    mapkeys = list(sm["map"].keys())
     mapkeys.sort()
     states.sort()
     assert mapkeys == states
 
 
+def test_get_reason(r):
+    r.flushdb()
+    sm = genmap()
+    sm["reason"] = "I am the reason just because"
+    assert r.execute_command("SM.SET", "foostates", json.dumps(sm))
+    assert r.execute_command("SM.GET", "foostates", "reason") == sm["reason"]
+    assert r.execute_command("SM.GET", "foostates", "REASON") == sm["reason"]
+
+
 def test_set_del(r):
     r.flushdb()
-    initial = "begin"
-    mapstates = {
-        "a": ["this", "maps", "states"],
-        "b": ["this", "too", "maps", "somewhere"],
-    }
-    validmap = {"initial": initial, "map": mapstates, "current": "shmm"}
-    assert r.execute_command("SM.SET", "foostates", json.dumps(validmap))
+    assert r.execute_command("SM.SET", "foostates", json.dumps(genmap()))
     assert r.delete("foostates")
 
     keys = r.keys()
@@ -87,27 +93,23 @@ def test_set_del(r):
 
 def test_reset(r):
     r.flushdb()
-    initial = "begin"
-    mapstates = {
-        "a": ["this", "maps", "states"],
-        "b": ["this", "too", "maps", "somewhere"],
-    }
-    validmap = {"initial": initial, "map": mapstates, "current": "too"}
-    assert r.execute_command("SM.SET", "foostates", json.dumps(validmap))
+    sm = genmap()
+    assert r.execute_command("SM.SET", "foostates", json.dumps(sm))
     r.execute_command("SM.RESET", "foostates")
-    assert r.execute_command("SM.STATE", "foostates") == [initial]
+    assert r.execute_command("SM.STATE", "foostates") == [sm["initial"]]
 
 
 def test_create(r):
     r.flushdb()
     key = "foo"
     assert r.execute_command("SM.CREATE", key)
-    assert r.execute_command("SM.STATE", key) == ['']
+    assert r.execute_command("SM.STATE", key) == [""]
     res = r.execute_command("SM.GET", key)
     val = json.loads(res)
     assert val["initial"] == ""
     assert val["map"] == {}
     assert val["current"] == ""
+    assert val["reason"] == ""
 
 
 def test_template(r):
@@ -116,24 +118,31 @@ def test_template(r):
     assert val["initial"] == ""
     assert val["map"] == {}
     assert val["current"] == ""
+    assert val["reason"] == ""
+
 
 def test_mutate(r):
     r.flushdb()
-    initial = "begin"
-    current = "begin"
-    mapstates = {
-        "a": ["this", "maps", "states"],
-        "b": ["this", "too", "maps", "somewhere"],
-        "begin": ["too", "maps"],
-    }
-    
-    valid_with_current = {"initial": initial, "map": mapstates, "current": current}
-    assert r.execute_command("SM.SET", "bar", json.dumps(valid_with_current))
-    assert r.execute_command("SM.MUTATE", "bar", "smurfy") == None
-    assert r.execute_command("SM.MUTATE", "bar", "too")
+    sm = genmap()
+    assert r.execute_command("SM.SET", "bar", json.dumps(sm))
 
-    # force state
+    # bad state
+    with pytest.raises(ResponseError):
+        assert r.execute_command("SM.MUTATE", "bar", "smurfy")
+
+    # good state
+    assert r.execute_command("SM.MUTATE", "bar", "too")
+    assert r.execute_command("SM.MUTATE", "bar", "b", "with a reason!")
+    assert r.execute_command("SM.GET", "bar", "reason") == "with a reason!"
+
     r.flushdb()
-    assert r.execute_command("SM.SET", "bar", json.dumps(valid_with_current))
-    assert r.execute_command("SM.MUTATE", "bar", "banna", "foo") == None
-    assert r.execute_command("SM.MUTATE", "bar", "banna", "F")
+    assert r.execute_command("SM.SET", "bar", json.dumps(sm))
+
+    # bad forced state
+    with pytest.raises(ResponseError):
+        assert r.execute_command("SM.MUTATE", "bar", "smurfy", "FORCE")
+        assert r.execute_command("SM.MUTATE", "bar", "smurfy", "force")
+
+    # now the force
+    assert r.execute_command("SM.MUTATE", "bar", "b", "this reason!", "force")
+    assert r.execute_command("SM.GET", "bar", "reason") == "this reason!"
