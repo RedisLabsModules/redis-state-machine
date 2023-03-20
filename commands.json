@@ -1,6 +1,6 @@
 {
     "SM.GET": {
-        "summary": "Gets a state machine, or the current state of a machine",
+        "summary": "Gets a state machine, or the stored reason for the state transition",
         "since": "0.1.0",
         "complexity": "O(N)",
         "group": "statemachine",
@@ -10,9 +10,18 @@
                 "type": "key"
             },
             {
-                "name": "state",
-                "type": "string"
+                "name": "codition",
+                "type": "string",
+                "optional": true,
+                "arguments": [
+                    {
+                        "name": "reason",
+                        "type": "pure-token",
+                        "token": "reason"
+                    }
+                ]
             }
+
         ]
     },
     "SM.SET": {
@@ -103,10 +112,14 @@
                 "type": "string"
             },
             {
-                "name": "codition",
+                "name": "condition",
                 "type": "string",
                 "optional": true,
                 "arguments": [
+                    {
+                        "name": "reason",
+                        "type": "string"
+                    },
                     {
                         "name": "force",
                         "type": "pure-token",
