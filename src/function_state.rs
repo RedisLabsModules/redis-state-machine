@@ -6,9 +6,6 @@ use redis_module::{
 };
 
 pub(crate) fn state(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
-    if args.len() < 2 || args.len() > 3 {
-        return Err(RedisError::WrongArity);
-    }
     let mut args = args.into_iter().skip(1);
 
     let key = args.next_arg()?;
@@ -34,10 +31,6 @@ pub(crate) fn state(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 }
 
 pub(crate) fn mutate(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
-    if args.len() < 3 || args.len() > 6 {
-        return Err(RedisError::WrongArity);
-    }
-
     let mut args = args.into_iter().skip(1);
     let key = args.next_arg()?;
     let target = args.next_arg()?;

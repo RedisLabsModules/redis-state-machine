@@ -1,15 +1,12 @@
 use crate::rdb::REDIS_SM_TYPE;
 use crate::types::{new, new_from_redisstring, StateMachine};
 use redis_module::{
-    key::RedisKeyWritable, Context, NextArg, RedisError, RedisResult, RedisString, RedisValue,
+    key::RedisKeyWritable, Context, NextArg, RedisResult, RedisString, RedisValue,
     REDIS_OK,
 };
 
 // Load the state machine from a json string
 pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
-    if args.len() > 4 || args.len() < 3 {
-        return Err(RedisError::WrongArity);
-    }
     let mut args = args.into_iter().skip(1);
     let key = args.next_arg()?;
     let val = args.next_arg()?;
@@ -34,10 +31,6 @@ pub(crate) fn set(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 }
 
 pub(crate) fn create(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
-    if args.len() != 2 {
-        return Err(RedisError::WrongArity);
-    }
-
     let mut args = args.into_iter().skip(1);
     let key = args.next_arg()?;
 
@@ -49,10 +42,6 @@ pub(crate) fn create(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
 
 // Reset the state machine to the initial state
 pub(crate) fn reset(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
-    if args.len() != 2 {
-        return Err(RedisError::WrongArity);
-    }
-
     let mut args = args.into_iter().skip(1);
     let key = args.next_arg()?;
 

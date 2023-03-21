@@ -5,9 +5,6 @@ use redis_module::{
 };
 
 pub(crate) fn get(ctx: &Context, args: Vec<RedisString>) -> RedisResult {
-    if args.len() < 2 || args.len() > 4 {
-        return Err(RedisError::WrongArity);
-    }
     let mut args = args.into_iter().skip(1);
     let key = args.next_arg()?;
     let fieldarg = args.next_arg();
