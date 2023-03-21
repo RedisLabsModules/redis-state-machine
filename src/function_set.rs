@@ -1,8 +1,7 @@
 use crate::rdb::REDIS_SM_TYPE;
 use crate::types::{new, new_from_redisstring, StateMachine};
 use redis_module::{
-    key::RedisKeyWritable, Context, NextArg, RedisResult, RedisString, RedisValue,
-    REDIS_OK,
+    key::RedisKeyWritable, Context, NextArg, RedisResult, RedisString, RedisValue, REDIS_OK,
 };
 
 // Load the state machine from a json string
