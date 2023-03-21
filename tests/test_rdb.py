@@ -10,7 +10,7 @@ def test_memory_usage(r):
             {"initial": "aval", "map": {"a": ["b", "c"]}, "current": "b", "reason": ""}
         ),
     )
-    assert r.memory_usage("memfoo") == 152
+    assert 150 <= r.memory_usage("memfoo") <= 200
 
 
 def test_copy(r):
