@@ -8,6 +8,7 @@ ARCH?=x86_64
 OS?=Linux
 REDISVERSION?=7.0.9-1
 VERSION?=99.99.99
+REDIS_SERVER_PATH?=redis/redis-server
 
 TARGETBASEDIR=target
 ifdef RELEASE
@@ -27,7 +28,7 @@ run: all
 	redis-server --loadmodule ${module_dest}
 
 bgtest: all
-	redis/redis-server --daemonize yes --loadmodule ${module_dest}
+	$(REDIS_SERVER_PATH) --daemonize yes --loadmodule ${module_dest}
 	pytest --junit-xml=results.xml
 	redis/redis-cli shutdown
 
