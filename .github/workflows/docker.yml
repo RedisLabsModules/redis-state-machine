@@ -32,7 +32,7 @@ jobs:
           push: true
           tags: ${{env.dockerorg}}/${{env.dockerrepo}}:edge
           context: .
-          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
+          platforms: linux/amd64,linux/arm64/v8
 
       - name: Update readme and description
         uses: christian-korneck/update-container-description-action@v1
