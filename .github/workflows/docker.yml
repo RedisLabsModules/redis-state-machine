@@ -4,9 +4,6 @@ name: Build Docker
 
 on:
   push:
-    branches:
-      - 'main'
-      - 'master'
 
 env:
   dockerorg: redislabs
@@ -34,6 +31,8 @@ jobs:
         with:
           push: true
           tags: ${{env.dockerorg}}/${{env.dockerrepo}}:edge
+          context: .
+          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
 
       - name: Update readme and description
         uses: christian-korneck/update-container-description-action@v1
